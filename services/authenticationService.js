@@ -4,7 +4,7 @@ const User = require("../model/User");
 const authenticate = async (req, res) => {
   const { emailOrUsername, password } = req.body;
   if (!emailOrUsername || !password) {
-    return res.status(400).json({ message: "Email and password are required" });
+    return res.status(400).json({ message: "Email/Username and password are required" });
   }
   try {
     let foundUser;
