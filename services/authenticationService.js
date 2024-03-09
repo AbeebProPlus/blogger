@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 const User = require("../model/User");
 const jwt = require("jsonwebtoken")
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const authenticate = async (req, res) => {
   const { emailOrUsername, password } = req.body;
   if (!emailOrUsername || !password) {
@@ -9,7 +11,7 @@ const authenticate = async (req, res) => {
   }
   try {
     let foundUser;
-    if (emailOrUsername.includes("@")){
+    if (emailRegex.test(emailOrUsername)){
         foundUser = await User.findOne({ "email": emailOrUsername }).exec();
     }else{
         foundUser = await User.findOne({"userName": emailOrUsername}).exec()

@@ -4,6 +4,11 @@ const app = express()
 const mongoose = require('mongoose')
 const connectDb = require('./config/dbConfig')
 const PORT = process.env.PORT || 8080
+const cors = require('cors')
+const corsOptions = require('./middleware/security/corsOptions')
+const verifyJWT = require('./middleware/security/verifyJwt')
+const cookieParser =  require('cookie-parser')
+const credentials = require('./middleware/security/credentials')
 
 connectDb()
 
