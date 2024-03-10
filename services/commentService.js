@@ -31,4 +31,20 @@ const commentOnPost = async (req, res) => {
   }
 };
 
-module.exports = {commentOnPost};
+const updateComment = async (req, res) => {
+    const {commentId, content} = req.body
+    if (!content || !commentId) return res.status(400).json({message: "Provide a content"})
+    try {
+        const updatedComment = await Comment.findByIdAndUpdate(commentId, {
+            content: content
+        },
+        {new: true}
+        )
+        if (!updatedComment) return res.status(404).json({message: "Comment not found"})
+        return res.status(200).json({message: "Comment update successful", updateComment})
+    }catch(err){
+        return res.sendStatus(500)
+    }
+}
+
+module.exports = {commentOnPost, updateComment};

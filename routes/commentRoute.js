@@ -4,5 +4,6 @@ const commentService = require('../services/commentService')
 
 router.route('/')
     .post(commentService.commentOnPost)
+    .put(commentService.updateComment)
 
 module.exports = router
