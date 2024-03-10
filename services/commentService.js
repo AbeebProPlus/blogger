@@ -41,7 +41,7 @@ const updateComment = async (req, res) => {
         {new: true}
         )
         if (!updatedComment) return res.status(404).json({message: "Comment not found"})
-        return res.status(200).json({message: "Comment update successful", updateComment})
+        return res.status(200).json({message: "Comment update successful", updatedComment})
     }catch(err){
         return res.sendStatus(500)
     }
