@@ -48,4 +48,18 @@ const updatePost = async (req, res) => {
     }
 
 }
-module.exports = { createPost, updatePost };
+
+const getPost = async (req, res) => {
+    if (!req.body?.id) return res.status(400).json({ "message": "Post ID param is required" });
+    try{
+        const foundPost = await Post.findOne({
+            _id: req.body.id
+        }).exec()
+        if (!foundPost) return res.sendStatus(404).json({"message": "Post not found"})
+        return res.status(200).json({foundPost})
+    }catch(err){
+        return res.sendStatus(500).json({"message": err.message})
+    }
+}
+
+module.exports = { createPost, updatePost, getPost };
