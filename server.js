@@ -11,10 +11,12 @@ const cookieParser =  require('cookie-parser')
 const credentials = require('./middleware/security/credentials')
 
 connectDb()
-
+// app.use(credentials)
+// app.use(cors(corsOptions))
 app.use(express.json())
-app.use('/register', require('./routes/registration'))
-app.use('/auth', require('./routes/authentication'))
+app.use('/register', require('./routes/registrationRoute'))
+app.use('/auth', require('./routes/authenticationRoute'))
+app.use('/blog_post', require('./routes/postRoute'))
 
 mongoose.connection.once('open', () => {
     console.log("Connected to mongo db")

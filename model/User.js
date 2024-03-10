@@ -30,6 +30,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    date: {
+        type: Date,
+        default: Date.now
+    } ,
     roles: {
         User: {type: Number, default: 2000},
         Admin: Number

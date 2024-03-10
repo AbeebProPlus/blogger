@@ -1,5 +1,7 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const Comment = require('./Comment');
 
 const postSchema = new Schema({
     title: {
@@ -10,10 +12,23 @@ const postSchema = new Schema({
         type: String,
         required: true
     },
-    date: {
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    createdOn: {
         type: Date,
         default: Date.now
-    }   
-})
+    },
+    edited: {
+        type: Boolean,
+        default: false
+    },
+    lastUdatedOn: {
+        type: Date,
+    },
+    comments: [Comment]
+});
 
-module.exports = mongoose.model('Post', postSchema)
+module.exports = mongoose.model('Posts', postSchema);
