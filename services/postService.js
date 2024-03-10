@@ -51,15 +51,27 @@ const updatePost = async (req, res) => {
 
 const getPost = async (req, res) => {
     if (!req.body?.id) return res.status(400).json({ "message": "Post ID param is required" });
+    const postId = req.body.id
     try{
-        const foundPost = await Post.findOne({
-            _id: req.body.id
-        }).exec()
-        if (!foundPost) return res.sendStatus(404).json({"message": "Post not found"})
+        const foundPost = await Post.findById(req.body.id)
+        if (!foundPost) return res.status(404).json({"message": `Post with ID ${postId} not found`})
         return res.status(200).json({foundPost})
     }catch(err){
-        return res.sendStatus(500).json({"message": err.message})
+        return res.send(500).json({"message": err.message})
     }
 }
 
-module.exports = { createPost, updatePost, getPost };
+const deletePost = async (req, res) => {
+    if (!req.body?.id) return res.status(400).json({ "message": "Post ID param is required" });
+    try{
+        const deletedPost = await Post.findByIdAndDelete(req.body.id)
+        if (!deletedPost) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+        return res.status(200).json({ message: 'Post deleted successfully', deletedPost });
+    } catch (error) {
+        return res.sendStatus(500)
+    }
+}
+
+module.exports = { createPost, updatePost, getPost, deletePost };

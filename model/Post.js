@@ -28,7 +28,7 @@ const postSchema = new Schema({
     lastUdatedOn: {
         type: Date,
     },
-    comments: [Comment]
+    comments: [Comment.schema]
 });
 
 module.exports = mongoose.model('Posts', postSchema);

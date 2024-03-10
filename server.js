@@ -17,6 +17,7 @@ app.use(express.json())
 app.use('/register', require('./routes/registrationRoute'))
 app.use('/auth', require('./routes/authenticationRoute'))
 app.use('/blog_post', require('./routes/postRoute'))
+app.use('/blog_comment',  require('./routes/commentRoute'))
 
 mongoose.connection.once('open', () => {
     console.log("Connected to mongo db")
