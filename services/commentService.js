@@ -32,19 +32,29 @@ const commentOnPost = async (req, res) => {
 };
 
 const updateComment = async (req, res) => {
-    const {commentId, content} = req.body
-    if (!content || !commentId) return res.status(400).json({message: "Provide a content"})
-    try {
-        const updatedComment = await Comment.findByIdAndUpdate(commentId, {
-            content: content
-        },
-        {new: true}
-        )
-        if (!updatedComment) return res.status(404).json({message: "Comment not found"})
-        return res.status(200).json({message: "Comment update successful", updatedComment})
-    }catch(err){
-        return res.sendStatus(500)
-    }
+  const { commentId, content } = req.body;
+  if (!content || !commentId) return res.status(400).json({ message: "Provide content and comment ID" });
+
+  try {
+      const foundComment = await Comment.findByIdAndUpdate(commentId, { content: content }, { new: true });
+      console.log(foundComment, "foundComment")
+      if (!foundComment) return res.status(404).json({ message: "Comment not found" });
+
+      const foundPost = await Post.findOne({ "comments._id": commentId }).exec();
+      console.log(foundPost, "foundPost")
+      if (!foundPost) return res.status(404).json({ message: "Post containing the comment not found" });
+
+      const commentIndex = foundPost.comments.findIndex(comment => comment._id.toString() === commentId);
+      console.log(commentIndex, "commentIndex")
+      foundPost.comments[commentIndex].content = content;
+      await foundPost.save();
+
+      return res.status(200).json({ message: "Comment updated successfully" });
+  } catch (err) {
+      console.error("Error updating comment:", err);
+      return res.sendStatus(500);
+  }
 }
+
 
 module.exports = {commentOnPost, updateComment};
