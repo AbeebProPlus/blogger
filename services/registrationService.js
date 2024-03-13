@@ -36,7 +36,8 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
       confirmationToken: confirmationToken,
     });
-    const confirmationLink = `http://localhost:${PORT}/confirm-email?token=${confirmationToken}`;
+    const confirmationLink = `http://localhost:${PORT}/register/confirm-email?token=${confirmationToken}`;
+
     await mailService.sendMail(
       email,
       "Confirm Your Email",
@@ -54,7 +55,8 @@ const registerUser = async (req, res) => {
 };
 
 const confirmEmail = async (req, res) => {
-  const { token } = req.params;
+    const { token } = req.query
+   if (!token) return res.status(400).json({ message: "Please check the url link sent to your inbox" });
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     const user = await User.findOneAndUpdate(

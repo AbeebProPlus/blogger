@@ -1,10 +1,11 @@
-const express = require('express')
-const router = express.Router()
-const registrationService = require('../services/registrationService')
+const express = require('express');
+const router = express.Router();
+const registrationService = require('../services/registrationService');
 
-console.log("Registration route")
-router.route('/')
-    .post(registrationService.registerUser)
-    .get(registrationService.confirmEmail)
+// Registration route
+router.post('/', registrationService.registerUser);
 
-module.exports = router
+// Email confirmation route
+router.get('/confirm-email', registrationService.confirmEmail);
+
+module.exports = router;
