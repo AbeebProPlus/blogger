@@ -25,7 +25,7 @@ const registerUser = async (req, res) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const confirmationToken = jwt.sign({ email }, "your_secret_key", {
+    const confirmationToken = jwt.sign({ email }, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: "1d",
     });
     const newUser = await User.create({
@@ -65,7 +65,7 @@ const confirmEmail = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    // return res.redirect('login=page-url');
+    return res.status(200).json({ message: "Email confirmed successfully" });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

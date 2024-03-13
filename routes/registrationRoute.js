@@ -5,5 +5,6 @@ const registrationService = require('../services/registrationService')
 console.log("Registration route")
 router.route('/')
     .post(registrationService.registerUser)
+    .get(registrationService.confirmEmail)
 
 module.exports = router

@@ -16,10 +16,13 @@ const authenticate = async (req, res) => {
     }else{
         foundUser = await User.findOne({"userName": emailOrUsername}).exec()
     }
-
     if (!foundUser) {
       return res.status(403).json({ message: `User does not exist` });
     }
+    if (!foundUser.enabled) {
+      return res.status(403).json({ message: `Please verify your email address before logging in` });
+    }
+
     const passwordMatches = await bcrypt.compare(password, foundUser.password);
     if (passwordMatches) {
         const roles = Object.values(foundUser.roles);
