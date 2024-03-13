@@ -1,5 +1,6 @@
 const User = require('../model/User')
 const bcrypt = require('bcrypt')
+const mailService = require('./mailService')
 
 
 const registerUser = async (req, res) => {
@@ -26,7 +27,7 @@ const registerUser = async (req, res) => {
             "userName" : userName,
             "password": hashedPassword
         });
-        
+        await mailService.sendMail(email, "Welcome to our platform", "You have successfully created an account");
         console.log(createdUser);
         return res.status(201).json({"message": `New user ${userName} created successfully`});
     } catch (err) {
