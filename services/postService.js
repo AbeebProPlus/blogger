@@ -50,10 +50,10 @@ const updatePost = async (req, res) => {
 }
 
 const getPost = async (req, res) => {
-    if (!req.body?.id) return res.status(400).json({ "message": "Post ID param is required" });
+    if (!req.query?.id) return res.status(400).json({ "message": "Post ID param is required" });
     const postId = req.body.id
     try{
-        const foundPost = await Post.findById(req.body.id)
+        const foundPost = await Post.findById(req.query.id)
         if (!foundPost) return res.status(404).json({"message": `Post with ID ${postId} not found`})
         return res.status(200).json({foundPost})
     }catch(err){

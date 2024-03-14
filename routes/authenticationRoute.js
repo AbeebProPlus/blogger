@@ -1,13 +1,21 @@
-const express = require('express')
-const router = express.Router()
-const authenticationService = require('../services/authenticationService')
+const express = require('express');
+const router = express.Router();
+const authenticationService = require('../services/authenticationService');
 
 /**
  * @swagger
- * /auth:
+ * tags:
+ *   name: Authentication
+ *   description: User authentication operations
+ */
+
+/**
+ * @swagger
+ * /auth/login:
  *   post:
  *     summary: Authenticate user
  *     description: Endpoint to authenticate a user.
+ *     tags: [Authentication]
  *     requestBody:
  *       required: true
  *       content:
@@ -39,8 +47,43 @@ const authenticationService = require('../services/authenticationService')
  *         description: Internal server error.
  */
 
-router.route('/')
-    .post(authenticationService.authenticate)
+router.post('/login', authenticationService.authenticate);
 
+/**
+ * @swagger
+ * /auth/change-password:
+ *   put:
+ *     summary: Change user password
+ *     description: Endpoint to change the user's password.
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *               newPassword:
+ *                 type: string
+ *               oldPassword:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password changed successfully.
+ *       400:
+ *         description: Bad request. User ID, old password, and new password are required.
+ *       401:
+ *         description: Unauthorized. Old password does not match the current password.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal server error.
+ *     security:
+ *       - bearerAuth: []  # Applying JWT security for this operation
+ */
 
-module.exports = router
+router.put('/change-password', authenticationService.changePassword);
+
+module.exports = router;

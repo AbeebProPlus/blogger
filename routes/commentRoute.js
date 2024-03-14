@@ -4,10 +4,19 @@ const commentService = require('../services/commentService')
 
 /**
  * @swagger
- * /comments:
+ * tags:
+ *   name: Comment
+ *   description: Operations related comment on blog posts
+ */
+
+
+/**
+ * @swagger
+ * /comments/new:
  *   post:
  *     summary: Add a new comment
  *     description: Endpoint to add a new comment on a post.
+ *     tags: [Comment]
  *     requestBody:
  *       required: true
  *       content:
@@ -33,14 +42,15 @@ const commentService = require('../services/commentService')
  *     security:
  *       - bearerAuth: []  # Applying JWT security for this operation
  */
-router.post('/', commentService.commentOnPost);
+
 
 /**
  * @swagger
- * /comments:
+ * /comments/edit:
  *   put:
  *     summary: Update a comment
  *     description: Endpoint to update an existing comment.
+ *     tags: [Comment]
  *     requestBody:
  *       required: true
  *       content:
@@ -64,6 +74,7 @@ router.post('/', commentService.commentOnPost);
  *     security:
  *       - bearerAuth: []  # Applying JWT security for this operation
  */
-router.put('/', commentService.updateComment);
+router.post('/new', commentService.commentOnPost);
+router.put('/edit', commentService.updateComment);
 
 module.exports = router;

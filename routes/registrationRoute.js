@@ -1,12 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const registrationService = require('../services/registrationService');
+
 /**
  * @swagger
- * /registration:
+ * tags:
+ *   name: Registration
+ *   description: User registration operations
+ */
+
+/**
+ * @swagger
+ * /registration/register:
  *   post:
  *     summary: Register a new user
  *     description: Endpoint to register a new user.
+ *     tags: [Registration]
  *     requestBody:
  *       required: true
  *       content:
@@ -35,12 +44,15 @@ const registrationService = require('../services/registrationService');
  *         description: Internal server error.
  */
 
+router.post('/register', registrationService.registerUser);
+
 /**
  * @swagger
  * /registration/confirm-email:
  *   get:
  *     summary: Confirm user email
  *     description: Endpoint to confirm user email after registration.
+ *     tags: [Registration]
  *     parameters:
  *       - in: query
  *         name: token
@@ -58,9 +70,6 @@ const registrationService = require('../services/registrationService');
  *       500:
  *         description: Internal server error.
  */
-
-
-router.post('/', registrationService.registerUser);
 
 router.get('/confirm-email', registrationService.confirmEmail);
 
