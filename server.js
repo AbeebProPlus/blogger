@@ -9,10 +9,13 @@ const corsOptions = require('./middleware/security/corsOptions')
 const verifyJWT = require('./middleware/security/verifyJwt')
 const cookieParser =  require('cookie-parser')
 const credentials = require('./middleware/security/credentials')
+const swaggerUi = require('swagger-ui-express');
+const specs = require('./config/swaggerConfig');
 
 connectDb()
 // app.use(credentials)
 // app.use(cors(corsOptions))
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use(express.json())
 app.use('/register', require('./routes/registrationRoute'))
 app.use('/auth', require('./routes/authenticationRoute'))
