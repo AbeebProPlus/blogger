@@ -30,6 +30,8 @@ const commentService = require('../services/commentService')
  *         description: User or Post not found.
  *       500:
  *         description: Internal server error.
+ *     security:
+ *       - bearerAuth: []  # Applying JWT security for this operation
  */
 router.post('/', commentService.commentOnPost);
 
@@ -59,6 +61,8 @@ router.post('/', commentService.commentOnPost);
  *         description: Comment or Post not found.
  *       500:
  *         description: Internal server error.
+ *     security:
+ *       - bearerAuth: []  # Applying JWT security for this operation
  */
 router.put('/', commentService.updateComment);
 

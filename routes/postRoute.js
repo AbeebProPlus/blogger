@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const postService = require('../services/postService');
+const ROLE = require('../config/roles')
+const verifyRole = require('../middleware/security/verifyRole')
 /**
  * @swagger
- * /posts:
+ * /blog_post:
  *   post:
  *     summary: Create a new post
  *     description: Endpoint to create a new post.
@@ -29,7 +31,9 @@ const postService = require('../services/postService');
  *         description: User not found.
  *       500:
  *         description: Internal server error.
- *
+ *     security:
+ *       - bearerAuth: []  # Applying JWT security for this operation
+ * 
  *   put:
  *     summary: Update a post
  *     description: Endpoint to update an existing post.
@@ -55,7 +59,9 @@ const postService = require('../services/postService');
  *         description: Post not found.
  *       500:
  *         description: Internal server error.
- *
+ *     security:
+ *       - bearerAuth: []  # Applying JWT security for this operation
+ * 
  *   get:
  *     summary: Get a post
  *     description: Endpoint to get a post by ID.
@@ -74,7 +80,9 @@ const postService = require('../services/postService');
  *         description: Post not found.
  *       500:
  *         description: Internal server error.
- *
+ *     security:
+ *       - bearerAuth: []  # Applying JWT security for this operation
+ * 
  *   delete:
  *     summary: Delete a post
  *     description: Endpoint to delete a post by ID.
@@ -93,12 +101,14 @@ const postService = require('../services/postService');
  *         description: Post not found.
  *       500:
  *         description: Internal server error.
+ *     security:
+ *       - bearerAuth: []  # Applying JWT security for this operation
  */
 
 router.route('/')
-    .post(postService.createPost)
-    .put(postService.updatePost)
+    .post(verifyRole(ROLE.Admin), postService.createPost)
+    .put(verifyRole(ROLE.User), postService.updatePost)
     .get(postService.getPost)
-    .delete(postService.deletePost);
+    .delete(verifyRole(ROLE.Admin), postService.deletePost);
 
 module.exports = router;

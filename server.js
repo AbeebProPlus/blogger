@@ -13,12 +13,14 @@ const swaggerUi = require('swagger-ui-express');
 const specs = require('./config/swaggerConfig');
 
 connectDb()
-// app.use(credentials)
-// app.use(cors(corsOptions))
+app.use(credentials)
+app.use(cors(corsOptions))
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use(express.json())
+app.use(cookieParser())
 app.use('/register', require('./routes/registrationRoute'))
 app.use('/auth', require('./routes/authenticationRoute'))
+app.use(verifyJWT)
 app.use('/blog_post', require('./routes/postRoute'))
 app.use('/blog_comment',  require('./routes/commentRoute'))
 

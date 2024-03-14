@@ -62,9 +62,9 @@ const getPost = async (req, res) => {
 }
 
 const deletePost = async (req, res) => {
-    if (!req.body?.id) return res.status(400).json({ "message": "Post ID param is required" });
+    if (!req.query?.id) return res.status(400).json({ "message": "Post ID query is required" });
     try{
-        const deletedPost = await Post.findByIdAndDelete(req.body.id)
+        const deletedPost = await Post.findByIdAndDelete(req.query.id)
         if (!deletedPost) {
             return res.status(404).json({ message: 'Post not found' });
         }
