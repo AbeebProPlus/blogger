@@ -72,5 +72,66 @@ router.post('/register', registrationService.registerUser);
  */
 
 router.get('/confirm-email', registrationService.confirmEmail);
+/**
+ * @swagger
+ * /registration/forgot-password:
+ *   post:
+ *     summary: Forgot password
+ *     description: Endpoint to initiate the forgot password process.
+ *     tags: [Registration]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password reset email sent successfully.
+ *       400:
+ *         description: Bad request. Email is missing.
+ *       500:
+ *         description: Internal server error.
+ */
+
+router.post('/forgot-password', registrationService.forgotPassword);
+/**
+ * @swagger
+ * /registration/reset-password:
+ *   post:
+ *     summary: Reset password
+ *     description: Endpoint to reset user password.
+ *     tags: [Registration]
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token sent to the user's email.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               newPassword:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password reset successfully.
+ *       400:
+ *         description: Bad request. Token or new password is missing.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal server error.
+ */
+
+router.post('/reset-password', registrationService.resetPassword);
 
 module.exports = router;

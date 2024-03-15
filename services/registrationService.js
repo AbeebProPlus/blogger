@@ -2,15 +2,15 @@ const User = require("../model/User");
 const bcrypt = require("bcrypt");
 const mailService = require("./mailService");
 const jwt = require("jsonwebtoken");
+const PORT = process.env.PORT;
 
 const registerUser = async (req, res) => {
   const { firstName, lastName, email, userName, password } = req.body;
-  const PORT = process.env.PORT;
 
   if (!firstName || !lastName || !email || !userName || !password) {
     return res.status(400).json({ message: "Please provide full details" });
   }
-  const duplicateEmail = await User.findOne({ email: email });
+  const duplicateEmail = await User.findOne({ email: email }).exec();
   const duplicateUserName = await User.findOne({ userName: userName });
   if (duplicateEmail) {
     return res.status(409).json({
@@ -38,7 +38,7 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
       confirmationToken: confirmationToken,
     });
-    const confirmationLink = `http://localhost:${PORT}/register/confirm-email?token=${confirmationToken}`;
+    const confirmationLink = `http://localhost:${PORT}/registration/confirm-email?token=${confirmationToken}`;
 
     await mailService.sendMail(
       email,
@@ -77,7 +77,7 @@ const confirmEmail = async (req, res) => {
 };
 
 const forgotPassword = async (req, res) => {
-  const email = req.query;
+  const email = req.body.email;
   if (!email) return res.status(400).json({ message: "Provide your address" });
   try {
     const confirmationToken = jwt.sign(
@@ -87,7 +87,7 @@ const forgotPassword = async (req, res) => {
         expiresIn: "1d",
       }
     );
-    const resetPasswordLink = `http://localhost:${PORT}/register/confirm-email?token=${confirmationToken}`;
+    const resetPasswordLink = `http://localhost:${PORT}/registration?token=${confirmationToken}`;
     const foundUser = await User.findOne({ email: email }).exec();
     if (!foundUser)
       return res
@@ -120,14 +120,17 @@ const resetPassword = async (req, res) => {
       .status(400)
       .json({ message: "Please check the url link sent to your inbox" });
   if (!newPassword) return res.status(400).json({message: "Please provide new password"})
-  
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     const user = await User.findOne({email: decoded.email }).exec()
     if (!user) return res.sendStatus(404)
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword
+    await user.save()
+    return res.status(200).json({message: "Password reset successfully"})
   }catch(err){
     return res.status(500).json({message: err.message})
   }
 };
 
-module.exports = { registerUser, confirmEmail, forgotPassword };
+module.exports = { registerUser, confirmEmail, forgotPassword, resetPassword };
