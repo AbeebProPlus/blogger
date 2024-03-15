@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const User = require("../model/User");
 const jwt = require("jsonwebtoken");
+const {log} = require('../utils/logger');
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -57,6 +58,7 @@ const authenticate = async (req, res) => {
       res.status(200).json({ accessToken });
     } else {
       res.sendStatus(401);
+      log(`User ${emailOrUsername} failed to authenticate. \t${req.method}\t${req.headers.origin}\t${req.url}`, 'failedAuth.txt');
     }
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
