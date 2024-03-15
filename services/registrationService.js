@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const mailService = require("./mailService");
 const jwt = require("jsonwebtoken");
 const PORT = process.env.PORT;
+const  {log} = require('../utils/logger')
 
 const registerUser = async (req, res) => {
   const { firstName, lastName, email, userName, password } = req.body;
@@ -45,6 +46,7 @@ const registerUser = async (req, res) => {
       "Confirm Your Email",
       `Please click the following link to confirm your email: ${confirmationLink}`
     );
+    log(`User ${userName} with ${email} registered successfully.`, 'registration.txt')
     return res.status(201).json({
       message: `User ${userName} registered successfully. Please check your email to confirm your account.`,
     });
