@@ -46,7 +46,7 @@ const registerUser = async (req, res) => {
       "Confirm Your Email",
       `Please click the following link to confirm your email: ${confirmationLink}`
     );
-    log(`User ${userName} with ${email} registered successfully.`, 'registration.txt')
+    log(`User ${userName} with ${email} successfully registered.`, 'registration.txt')
     return res.status(201).json({
       message: `User ${userName} registered successfully. Please check your email to confirm your account.`,
     });
