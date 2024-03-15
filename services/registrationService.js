@@ -72,7 +72,7 @@ const confirmEmail = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    log(`User ${userName} with ${email} confirmed and enabled.`, 'enabled.txt')
+    log(`User with ${user.email} confirmed and enabled.`, 'enabled.txt')
     return res.status(200).json({ message: "Email confirmed successfully" });
   } catch (err) {
     return res.status(500).json({ message: err.message });
