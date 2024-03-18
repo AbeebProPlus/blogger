@@ -85,5 +85,24 @@ router.post('/login', authenticationService.authenticate);
  */
 
 router.put('/change-password', authenticationService.changePassword);
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Log out of account
+ *     description: Endpoint to log out user.
+ *     tags: [Authentication]
+ *     responses:
+ *       204:
+ *         description: No content
+ *       401:
+ *         description: Unauthorized - User not authenticated
+ *       500:
+ *         description: Internal server error
+ *     security:
+ *       - bearerAuth: []  # Applying JWT security for this operation
+ */
+
+router.post('/logout', authenticationService.logout);
 
 module.exports = router;
