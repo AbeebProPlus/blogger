@@ -26,7 +26,7 @@ const options = {
   apis: ['./routes/*.js'],
   security: [
     {
-      bearerAuth: [], // Apply this security scheme globally
+      bearerAuth: [],
     },
   ],
 };
